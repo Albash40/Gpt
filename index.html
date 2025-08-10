@@ -1,177 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Skye AI</title>
-<style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skye AI</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Basic layout styles – replace with your own design later */
     body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f0f4ff;
-        color: #333;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f8f9fa;
+      color: #333;
     }
 
-    /* Collapsible Navbar */
-    .navbar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background: #1e3a8a;
-        color: white;
-        overflow: hidden;
-        transition: max-height 0.4s ease;
-        max-height: 50px;
+    /* Collapsible navbar */
+    .skye-navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 60px; /* collapsed width */
+      height: 100%;
+      background: #111;
+      color: white;
+      overflow-x: hidden;
+      transition: width 0.3s;
     }
-    .navbar.expanded {
-        max-height: 500px;
+    .skye-navbar:hover {
+      width: 250px; /* expanded width */
     }
-    .navbar-header {
-        padding: 10px;
-        font-size: 18px;
-        cursor: pointer;
-        background: #1e3a8a;
+    .skye-navbar a {
+      display: block;
+      padding: 12px;
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      white-space: nowrap;
     }
-    .navbar-content {
-        padding: 10px;
-    }
-    .navbar-content div {
-        margin: 8px 0;
-        cursor: pointer;
-    }
-    .navbar-content div:hover {
-        text-decoration: underline;
+    .skye-navbar a:hover {
+      background: #444;
     }
 
-    /* Welcome Area */
-    .welcome {
-        margin-top: 70px;
-        text-align: center;
-        padding: 20px;
+    /* Main content area */
+    .skye-main {
+      margin-left: 60px; /* match navbar collapsed width */
+      padding: 20px;
+      transition: margin-left 0.3s;
     }
-    .welcome h1 {
-        font-size: 2em;
-    }
-    .welcome p {
-        color: #555;
+    .skye-navbar:hover + .skye-main {
+      margin-left: 250px; /* match expanded navbar width */
     }
 
-    /* Dynamic Prompt Box */
-    .prompt-box {
-        max-width: 500px;
-        margin: 20px auto;
-        background: white;
-        border-radius: 12px;
-        padding: 15px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        text-align: center;
-        font-size: 1.1em;
-        color: #1e3a8a;
+    /* Welcome section */
+    .skye-welcome {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .skye-welcome h1 {
+      font-size: 2em;
+    }
+    .skye-welcome p {
+      font-size: 1.2em;
+      color: #666;
     }
 
-    /* Chat Section */
-    .chat-section {
-        max-width: 600px;
-        margin: 20px auto;
-        display: flex;
-        gap: 10px;
-        padding: 10px;
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    /* Dynamic prompt box */
+    .skye-prompt-box {
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+      min-height: 60px;
     }
-    .chat-section input[type="text"] {
-        flex: 1;
-        padding: 10px;
-        font-size: 1em;
-        border: 1px solid #ccc;
-        border-radius: 8px;
+
+    /* Chat input section */
+    .skye-chat-input {
+      display: flex;
+      gap: 10px;
     }
-    .chat-section input[type="file"] {
-        display: none;
+    .skye-chat-input input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
     }
-    .file-label {
-        background: #3b82f6;
-        color: white;
-        padding: 10px;
-        border-radius: 8px;
-        cursor: pointer;
+    .skye-chat-input button {
+      background: #4cafef;
+      border: none;
+      padding: 10px 15px;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
     }
-    .send-btn {
-        background: #22c55e;
-        color: white;
-        padding: 10px 14px;
-        border-radius: 8px;
-        cursor: pointer;
-        border: none;
+    .skye-chat-input button:hover {
+      background: #3a9bdc;
     }
-    .mic-icon {
-        background: #f59e0b;
-        color: white;
-        padding: 10px;
-        border-radius: 8px;
-        cursor: pointer;
-        border: none;
-    }
-</style>
+  </style>
 </head>
 <body>
 
-<!-- Navbar -->
-<div class="navbar" id="navbar">
-    <div class="navbar-header" onclick="toggleNavbar()">☰ Menu</div>
-    <div class="navbar-content">
-        <div>➕ New Chat</div>
-        <div>🖼️ Library</div>
-        <div>📁 New Project</div>
-        <div>🗂️ Project Library</div>
-        <div>💡 AI Prompt Guide</div>
-        <div>🕒 Chat History</div>
+  <!-- Collapsible Navbar -->
+  <nav class="skye-navbar">
+    <a href="#">➕ New Chat</a>
+    <a href="#">🖼️ Library</a>
+    <a href="#">📁 New Project</a>
+    <a href="#">🗂️ Project Library</a>
+    <a href="#">💡 AI Prompt Guide</a>
+    <a href="#">🕒 Chat History</a>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="skye-main">
+    
+    <!-- Welcome Section -->
+    <div class="skye-welcome">
+      <h1>👋 Welcome to Skye AI – Your Creative Partner!</h1>
+      <p>Build, brainstorm, and create your dream with AI.</p>
     </div>
-</div>
 
-<!-- Welcome Area -->
-<div class="welcome">
-    <h1>👋 Welcome to Skye AI – Your Creative Partner!</h1>
-    <p>Build, brainstorm, and create your dream with AI.</p>
-</div>
+    <!-- Dynamic Prompt Box -->
+    <div class="skye-prompt-box" id="skye-prompt-box">
+      <!-- JavaScript will rotate prompts here -->
+      💬 You can ask me anything
+    </div>
 
-<!-- Dynamic Prompt Box -->
-<div class="prompt-box" id="promptBox">
-    🧠 Each Skye Chat earns you +20 SKYE
-</div>
+    <!-- Chat Input Section -->
+    <div class="skye-chat-input">
+      <input type="text" placeholder="Type your message..." />
+      <button>📤</button>
+      <!-- Future voice input icon -->
+      <!-- <button>🗣️</button> -->
+    </div>
 
-<!-- Chat Section -->
-<div class="chat-section">
-    <input type="text" placeholder="Ask Skye AI..." id="chatInput">
-    <label for="fileUpload" class="file-label">📎</label>
-    <input type="file" id="fileUpload">
-    <button class="send-btn">📤</button>
-    <button class="mic-icon">🎤</button>
-</div>
+  </div>
 
-<script>
-    // Navbar toggle
-    function toggleNavbar() {
-        document.getElementById("navbar").classList.toggle("expanded");
-    }
-
-    // Rotating prompts
+  <!-- JavaScript for rotating prompts -->
+  <script>
     const prompts = [
-        "🧠 Each Skye Chat earns you +20 SKYE",
-        "💬 You can ask me anything",
-        "🚀 Let’s build your dream idea today",
-        "🛠️ AI helps brainstorm, plan, and create instantly",
-        "📌 Save your chats and access them anytime",
-        "🎯 Start your startup idea here"
+      "🧠 Each Skye Chat earns you +20 SKYE",
+      "💬 You can ask me anything",
+      "🚀 Let’s build your dream idea today",
+      "🛠️ AI helps brainstorm, plan, and create instantly",
+      "📌 Save your chats and access them anytime",
+      "🎯 Start your startup idea here"
     ];
     let promptIndex = 0;
+    const promptBox = document.getElementById("skye-prompt-box");
+
     setInterval(() => {
-        promptIndex = (promptIndex + 1) % prompts.length;
-        document.getElementById("promptBox").textContent = prompts[promptIndex];
+      promptIndex = (promptIndex + 1) % prompts.length;
+      promptBox.textContent = prompts[promptIndex];
     }, 3000);
-</script>
+  </script>
 
 </body>
 </html>
